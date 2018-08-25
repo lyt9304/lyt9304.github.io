@@ -253,6 +253,878 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/isNaN的诡异行为/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/25/isNaN的诡异行为/" itemprop="url">isNaN的诡异行为</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T17:57:38+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="isNaN-的诡异行为"><a href="#isNaN-的诡异行为" class="headerlink" title="isNaN 的诡异行为"></a>isNaN 的诡异行为</h2><h3 id="什么是-NaN"><a href="#什么是-NaN" class="headerlink" title="什么是 NaN"></a>什么是 NaN</h3><p>在 javascript 中有一个神奇的变量叫做 NaN，意思是 Not a number。</p>
+<p>什么时候会遇到这个变量呢，例如我们想把一个字符串<code>&#39;10&#39;</code>转换成数字<code>10</code>，会使用<code>Number(&#39;10&#39;)</code> 或者 <code>parseInt(&#39;10&#39;)</code>，那如果这个字符串并不是一个有效的数字呢？例如我们进行 parseInt(‘abc’)就会得到 NaN。</p>
+<p>当我们想知道转换出来的东西是不是一个 NaN，就会涉及到如何去判断 NaN 这个问题，但是他的行为又非常的诡异，因为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">NaN</span> == <span class="literal">NaN</span> <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="literal">NaN</span> === <span class="literal">NaN</span> <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>所以我们没有办法通过双等和三等来判断出 NaN</p>
+<p>当然反过来想，我们也可以利用他的这个特性 <code>a !== a</code> 来判断是不是 NaN，因为目前为止只有 NaN 会有这样的行为。</p>
+<p>但是这样的代码非常的不直观，甚至于说不熟悉 js 或者 NaN 的人都会怀疑这个代码是不是写错了，哪有变量不等于自己呢？</p>
+<h3 id="isNaN-应运而生"><a href="#isNaN-应运而生" class="headerlink" title="isNaN 应运而生"></a>isNaN 应运而生</h3><p>isNaN 就是为了解决这个问题而诞生的，我们希望有一个函数能帮我们判断一个变量是不是 NaN</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">isNaN</span>(<span class="literal">NaN</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>看似这个 api 非常完美，但是似乎事情并没有那么简单</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">isNaN</span>(<span class="string">'abc'</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>曾经在这个上面踩过坑，为什么为了判断 NaN 的 api 会将字符串’abc’判断成 NaN 呢</p>
+<p>这是因为 isNaN 在判断的时候会做一次隐式的转换，等同于说先对参数进行一次 Number()的包装，再用返回值作为判断是否为 NaN 的标准</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>(<span class="string">'abc'</span>) <span class="comment">// NaN</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">isNaN</span>(<span class="string">'abc'</span>) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Number</span>(<span class="literal">true</span>) <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">isNaN</span>(<span class="literal">true</span>) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Number</span>(<span class="string">'10'</span>) <span class="comment">// 10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">isNaN</span>(<span class="string">'10'</span>) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>所以 isNaN 的行为是非常诡异的，甚至和他的语义并不相等价，所以 es6 增加了新的 API<code>Number.isNaN</code></p>
+<h3 id="Number-isNaN"><a href="#Number-isNaN" class="headerlink" title="Number.isNaN"></a>Number.isNaN</h3><p>Number.isNaN 不会对参数进行隐式转换，而是符合 api 语义地只判断参数是否是 NaN</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>.isNaN(<span class="literal">NaN</span>) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Number</span>.isNaN(<span class="string">'abc'</span>) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Number</span>.isNaN(<span class="literal">true</span>) <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Number</span>.isNaN(<span class="string">'10'</span>) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>isNaN 有坑，能用就用 Number.isNaN，不能用最好自己 polyfill 或包装一个函数，如果判断 NaN 的地方都利用 <code>a !== a</code>，代码可读和理解上会有损失</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>.isNaN =</span><br><span class="line">	<span class="built_in">Number</span>.isNaN ||</span><br><span class="line">	<span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> value !== value</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/Object-defineProperty/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/25/Object-defineProperty/" itemprop="url">Object.defineProperty</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T17:52:44+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty"></a>Object.defineProperty</h2><blockquote>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="noopener">MDN Object.defineProperty()</a></p>
+</blockquote>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"></span><br><span class="line">obj: 要在其上定义属性的对象</span><br><span class="line"></span><br><span class="line">prop: 要定义或修改的属性的名称</span><br><span class="line"></span><br><span class="line">descriptor: 将被定义或修改的属性描述符</span><br><span class="line"></span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">Object.defineProperty(obj, prop, descriptor)</span><br></pre></td></tr></table></figure>
+<h3 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h3><ul>
+<li>数据描述符和存取描述符。</li>
+<li>数据描述符是一个具有值的属性，该值可能是可写的，也可能不是可写的。(对应<code>value</code>和<code>writable</code>)</li>
+<li>存取描述符是由 getter-setter 函数对描述的属性。（对应<code>get</code>和<code>set</code>）</li>
+<li>描述符必须是这两种形式之一；不能同时是两者，否则会异常。</li>
+<li>configurable 与 enumerable 则无限制。</li>
+<li>有可能会改变继承来的属性，使用 Object.freeze(Object.prototype)或将<strong>proto</strong>指向 null，可防止。</li>
+</ul>
+<ol>
+<li><p><code>configurable</code>(= false)</p>
+<p>当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">	get: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;,</span><br><span class="line">	configurable: <span class="literal">false</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一旦设置了configurable: false，就无法改变描述符，无法改值，也无法delete这个属性了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// throws a TypeError</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123; <span class="attr">configurable</span>: <span class="literal">true</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// throws a TypeError (set was undefined previously)</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123; <span class="attr">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125; &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// throws a TypeError (even though the new get does exactly the same thing)</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123;</span><br><span class="line">	get: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// throws a TypeError</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">'a'</span>, &#123; <span class="attr">value</span>: <span class="number">12</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(o.a) <span class="comment">// logs 1</span></span><br><span class="line"><span class="keyword">delete</span> o.a <span class="comment">// Nothing happens</span></span><br><span class="line"><span class="built_in">console</span>.log(o.a) <span class="comment">// logs 1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>enumerable</code>(= false)</p>
+<p>当且仅当该属性的 enumerable 为 true 时，该属性才能够出现在对象的枚举属性中。</p>
+</li>
+<li><p><code>value</code>(= undefined)</p>
+<p>该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。</p>
+</li>
+<li><p><code>writable</code>(= false)</p>
+<p>当且仅当该属性的 writable 为 true 时，value 才能被赋值运算符改变</p>
+</li>
+<li><p><code>get</code>(= undefined)</p>
+<p>一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。该方法返回值被用作属性值。</p>
+</li>
+<li><p><code>set</code>(= undefined)</p>
+<p>一个给属性提供 setter 的方法，如果没有 setter 则为 undefined。该方法将接受唯一参数，并将该参数的新值分配给该属性。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/文章笔记-六个漂亮的ES6技巧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/25/文章笔记-六个漂亮的ES6技巧/" itemprop="url">文章笔记 - 六个漂亮的ES6技巧</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T17:35:15+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具效率/" itemprop="url" rel="index">
+                    <span itemprop="name">工具效率</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="六个漂亮的-ES6-技巧"><a href="#六个漂亮的-ES6-技巧" class="headerlink" title="六个漂亮的 ES6 技巧"></a>六个漂亮的 ES6 技巧</h2><h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><blockquote>
+<p><a href="http://2ality.com/2016/05/six-nifty-es6-tricks.html" target="_blank" rel="noopener">英文原文：Six nifty ES6 tricks</a><br><a href="https://www.h5jun.com/post/six-nifty-es6-tricks.html" target="_blank" rel="noopener">中文译文：六个漂亮的 ES6 技巧</a></p>
+</blockquote>
+<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><ol>
+<li><p>通过参数默认值强制要求传参</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">paramRequired</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Missing parameter'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">arg = paramRequired(</span>)) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> arg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里可以发现，默认参数是运行时，参数缺失时，才会被求值的</p>
+<p>查看 babel 的转码也可以看出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// babel</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mandatory</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Missing parameter'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> mustBeProvided =</span><br><span class="line">		<span class="built_in">arguments</span>.length &gt; <span class="number">0</span> &amp;&amp; <span class="built_in">arguments</span>[<span class="number">0</span>] !== <span class="literal">undefined</span></span><br><span class="line">			? <span class="built_in">arguments</span>[<span class="number">0</span>]</span><br><span class="line">			: mandatory()</span><br><span class="line">	<span class="keyword">return</span> mustBeProvided</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过 for-of 循环来遍历数组元素和索引</p>
+<p>可以通过 Array.prototype.entries 来弥补 for-of 无法获得数组索引的缺点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [index, elem] <span class="keyword">of</span> arr.entries()) &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">`index = <span class="subst">$&#123;index&#125;</span>, elem = <span class="subst">$&#123;elem&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 Unicode 表示的字符串 🚀 占两个字符的长度</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">'x🚀y'</span> <span class="comment">//x\uD83D\uDE80y</span></span><br><span class="line"><span class="comment">// for-of遍历每个字符，不用担心长度不一</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (ch <span class="keyword">of</span> str) &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(ch.length)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Output:</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// spread也可以很好将各个字符展开，容易算出实际的字数</span></span><br><span class="line"></span><br><span class="line">;[...<span class="string">'x\uD83D\uDE80y'</span>].length <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过变量解构交换两个变量的值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;[a, b] = [b, a]</span><br></pre></td></tr></table></figure>
+<p>可以想象，JavaScript 引擎在未来将会针对这个模式进行特别优化，去掉构造数组的开销</p>
+</li>
+<li><p>通过模板字面量（template literals）进行简单的模板解析</p>
+</li>
+<li><p>通过子类工厂实现简单的合成器</p>
+<p>javascript 通过继承来达到 mixin 的作用，类似于 php 中的 trait</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Storage = <span class="function"><span class="params">Sup</span> =&gt;</span> <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Sup</span> </span>&#123;</span><br><span class="line">    save(database) &#123; ··· &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Validation = <span class="function"><span class="params">Sup</span> =&gt;</span> <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Sup</span> </span>&#123;</span><br><span class="line">    validate(schema) &#123; ··· &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123; ··· &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">extends</span> <span class="title">Storage</span>(<span class="title">Validation</span>(<span class="title">Person</span>)) </span>&#123; ··· &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/Node.js的调试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/25/Node.js的调试/" itemprop="url">Node.js的调试</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T17:34:10+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Node-js-的调试"><a href="#Node-js-的调试" class="headerlink" title="Node.js 的调试"></a>Node.js 的调试</h2><h3 id="如何启动"><a href="#如何启动" class="headerlink" title="如何启动"></a>如何启动</h3><blockquote>
+<p>ref: <a href="https://nodejs.org/en/docs/guides/debugging-getting-started/" target="_blank" rel="noopener">https://nodejs.org/en/docs/guides/debugging-getting-started/</a></p>
+<p>ref: <a href="https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27" target="_blank" rel="noopener">https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node --inspect index.js</span><br><span class="line"></span><br><span class="line">node --inspect-brk index.js # node v7+ 会在第一行直接断点</span><br></pre></td></tr></table></figure>
+<h3 id="调试的载体"><a href="#调试的载体" class="headerlink" title="调试的载体"></a>调试的载体</h3><h4 id="1-chrome-dev-tool"><a href="#1-chrome-dev-tool" class="headerlink" title="1. chrome-dev-tool"></a>1. chrome-dev-tool</h4><ul>
+<li><code>about:inspect</code>（等价于<code>chrome://inspect</code>）</li>
+<li>选择<code>Remote Target</code> -&gt; <code>inspect</code></li>
+<li>弹出一个 dev tool 窗口，就可以调试了</li>
+</ul>
+<h4 id="2-vscode"><a href="#2-vscode" class="headerlink" title="2. vscode"></a>2. vscode</h4><blockquote>
+<p>ref: <a href="https://code.visualstudio.com/docs/editor/debugging#_variable-substitution" target="_blank" rel="noopener">https://code.visualstudio.com/docs/editor/debugging#_variable-substitution</a></p>
+</blockquote>
+<ul>
+<li>菜单<code>调试</code> -&gt; <code>启动调试</code>，或者 F5</li>
+<li>切换到 debug 界面即可开始调试</li>
+</ul>
+<p>Tips:</p>
+<ul>
+<li>debug 模式下 node 默认路径是<code>/usr/local/bin/node</code>。如果需要自定义的话，可以添加配置，vscode 会生成一个<code>lauch.json</code>文件，然后添加<code>runtimeExecutable</code>选项到自定义的 node 可执行文件即可。另外，必须要在项目文件夹下才能够创建<code>lauch.json</code>，所以我随便建的一个 test.js 打开，就无法创建。</li>
+<li><code>lauch.json</code>还能配置很多选项，可以参考 ref 链接查看详细的文档</li>
+</ul>
+<h3 id="关于调试的基本概念"><a href="#关于调试的基本概念" class="headerlink" title="关于调试的基本概念"></a>关于调试的基本概念</h3><p>无论是在 chrome 也好，vscode 也好，在打完断点之后，主要会通过几个按钮来操作语句的进行状态</p>
+<ul>
+<li>单步跳过(step over) 跳过该行语句，进入下一行进行调试</li>
+<li>单步调试(step into) 进入语句中的子函数进行步进调试</li>
+<li>单步跳出(step out) 跳出当前函数，进入调用源进行调试</li>
+<li>继续（step）继续执行，直到下一个断点暂停</li>
+</ul>
+<p>对于 <code>step over</code> 和 <code>step into</code> 一直有些搞不清楚，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">const fn = () =&gt; &#123;</span><br><span class="line"></span><br><span class="line">	const random = Math.random() // fn:1</span><br><span class="line"></span><br><span class="line">	return random</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const random = fn() // main:1 =&gt; breakpoint</span><br><span class="line"></span><br><span class="line">if (random &gt; 0.5) &#123;</span><br><span class="line"></span><br><span class="line">	// main:2</span><br><span class="line"></span><br><span class="line">	console.log(&apos;You win&apos;)</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line">	console.log(&apos;Maybe next time&apos;)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们在<code>main:1</code>的地方打上断点后：</p>
+<ul>
+<li>如果采用<code>step over</code>，那么将会直接跳到<code>main:2</code></li>
+<li>如果采用<code>step into</code>则会进入到 fn 内部的<code>fn:1</code>；如果在此时使用<code>step out</code>则会跳出 fn 函数，回到原来调用源的下一句，也就是<code>main:2</code></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/ShortCutSnippet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/25/ShortCutSnippet/" itemprop="url">常用系统 / 应用快捷键</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T17:34:05+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具效率/" itemprop="url" rel="index">
+                    <span itemprop="name">工具效率</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="shortcut-snippet"><a href="#shortcut-snippet" class="headerlink" title="shortcut snippet"></a>shortcut snippet</h2><p>这里记录了最常用的一些软件中会用的快捷键，都是以 mac osx 为前提的。</p>
+<p>另外增加常用记号的映射：⌘（command）、⌥（option）、⇧（shift）、⇪（caps lock）、⌃（control）</p>
+<h3 id="mac"><a href="#mac" class="headerlink" title="mac"></a>mac</h3><ul>
+<li>control + left / right 切换工作台</li>
+<li>control + up 打开</li>
+<li>f4 launchpad</li>
+<li>alt + space alfred</li>
+<li>ctrl + a 跳到行首</li>
+<li>command + q 退出程序</li>
+<li>command + w 关闭窗口</li>
+</ul>
+<h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><ul>
+<li>gg 文档第一行首</li>
+<li>G 文档最后一行首</li>
+<li>$ 行尾</li>
+<li>0 行首</li>
+<li>u undo</li>
+<li>ctrl+r redo</li>
+<li>yy 复制整行</li>
+<li>p 粘贴至光标后</li>
+<li>/ + 要找的单词 + enter 搜索文档，n 跳到下一个结果，N 跳到上一个结果</li>
+</ul>
+<h3 id="terminal"><a href="#terminal" class="headerlink" title="terminal"></a>terminal</h3><ul>
+<li>command + k 清屏</li>
+<li>command + t 新建标签</li>
+<li>command + w 关闭当前标签页</li>
+<li>command + s 保存终端输出</li>
+<li>command + d 垂直分隔当前标签页</li>
+<li>command + shift + d 关闭垂直分隔当前标签页</li>
+<li>command + shift + { / } 向左/向右切换标签</li>
+</ul>
+<h3 id="vscode"><a href="#vscode" class="headerlink" title="vscode"></a>vscode</h3><ul>
+<li>alt + left / right 光标转移以单词为单位</li>
+<li>command + left / right 光标跳到行首或行位</li>
+<li>command + up / down 光标跳到文件最上或最下</li>
+<li>f5 调试</li>
+<li>command + p 找文件</li>
+<li>shift + command + p 更多命令</li>
+<li>command + k + v 预览 md</li>
+<li>command + \ 快速打开平行窗口显示文件</li>
+</ul>
+<h3 id="chrome"><a href="#chrome" class="headerlink" title="chrome"></a>chrome</h3><ul>
+<li>command + l 定位到搜索栏</li>
+<li>command + n 打开新窗口</li>
+<li>command + t 打开新标签页</li>
+<li>command + shift + n 在隐身模式下打开新窗口</li>
+<li>command + w 关闭当前标签页或弹出式窗口</li>
+<li>command + 1-8 切换到指定位置编号的标签页</li>
+<li>command + 9 切换到最后一个标签页</li>
+<li>command + shift + { / } 向左/向右切换标签</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/搭建博客/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -358,18 +1230,20 @@
 <li><p>本地打开</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br><span class="line"><span class="meta">#</span> hexo s</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>发布第一篇文章</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 新增一篇文章</span><br><span class="line">hexo new "My New Post"</span><br></pre></td></tr></table></figure>
+<p>随后会在<code>source/_posts</code>目录下生成对应的 md 文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 生成静态文件</span><br><span class="line">hexo generate</span><br><span class="line"><span class="meta">#</span> hexo g</span><br></pre></td></tr></table></figure>
+<p>这一步会将 markdown 编译成对应的 html，以供部署</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 部署至github</span><br><span class="line">hexo deploy</span><br><span class="line"><span class="meta">#</span> hexo d</span><br></pre></td></tr></table></figure>
+<p>在这一步前，安装 hexo-deployer-git 的插件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<p>在<code>_config.yml</code>中配置好对应的信息</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/lyt9304/lyt9304.github.io.git</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过一会儿访问对应的 github page 即可看到博客的内容</p>
+</li>
 </ol>
-<p>3) 发布第一篇文章</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 新增一篇文章</span><br><span class="line">hexo new "My New Post"</span><br></pre></td></tr></table></figure>
-<p>   随后会在<code>source/_posts</code>目录下生成对应的 md 文件</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 生成静态文件</span><br><span class="line">hexo generate</span><br><span class="line"><span class="meta">#</span> hexo g</span><br></pre></td></tr></table></figure>
-<p>   这一步会将 markdown 编译成对应的 html，以供部署</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 部署至github</span><br><span class="line">hexo deploy</span><br><span class="line"><span class="meta">#</span> hexo d</span><br></pre></td></tr></table></figure>
-<p>   在这一步前，安装 hexo-deployer-git 的插件</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add hexo-deployer-git</span><br></pre></td></tr></table></figure>
-<p>   在<code>_config.yml</code>中配置好对应的信息</p>
-   <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/lyt9304/lyt9304.github.io.git</span></span><br></pre></td></tr></table></figure>
-<p>4) 过一会儿访问对应的 github page 即可看到博客的内容</p>
 <h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><h4 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h4><ol>
 <li><p>下载主题</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
@@ -486,7 +1360,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -497,7 +1371,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -508,7 +1382,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

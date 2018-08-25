@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s   3) 发布第一篇文章    12# 新增一篇文章hexo new &quot;My">
+<meta name="description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s  发布第一篇文章 12# 新增一篇文章hexo new &quot;My New Pos">
 <meta name="keywords" content="hexo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建博客">
 <meta property="og:url" content="http://yoursite.com/2018/08/25/搭建博客/index.html">
 <meta property="og:site_name" content="lyt9304&#39;s Blog">
-<meta property="og:description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s   3) 发布第一篇文章    12# 新增一篇文章hexo new &quot;My">
+<meta property="og:description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s  发布第一篇文章 12# 新增一篇文章hexo new &quot;My New Pos">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2018-08-25T09:30:24.822Z">
+<meta property="og:updated_time" content="2018-08-25T09:33:10.734Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建博客">
-<meta name="twitter:description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s   3) 发布第一篇文章    12# 新增一篇文章hexo new &quot;My">
+<meta name="twitter:description" content="搭建博客使用 Hexo - yarn global add hexo-cli Git page Next Theme  安装 建立文件夹，并初始化 1234mkdir my-bloghexo init my-blogscd my-blogsyarn install  本地打开 12hexo server# hexo s  发布第一篇文章 12# 新增一篇文章hexo new &quot;My New Pos">
 
 
 
@@ -354,18 +354,20 @@
 <li><p>本地打开</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br><span class="line"><span class="meta">#</span> hexo s</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>发布第一篇文章</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 新增一篇文章</span><br><span class="line">hexo new "My New Post"</span><br></pre></td></tr></table></figure>
+<p>随后会在<code>source/_posts</code>目录下生成对应的 md 文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 生成静态文件</span><br><span class="line">hexo generate</span><br><span class="line"><span class="meta">#</span> hexo g</span><br></pre></td></tr></table></figure>
+<p>这一步会将 markdown 编译成对应的 html，以供部署</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 部署至github</span><br><span class="line">hexo deploy</span><br><span class="line"><span class="meta">#</span> hexo d</span><br></pre></td></tr></table></figure>
+<p>在这一步前，安装 hexo-deployer-git 的插件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add hexo-deployer-git</span><br></pre></td></tr></table></figure>
+<p>在<code>_config.yml</code>中配置好对应的信息</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/lyt9304/lyt9304.github.io.git</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过一会儿访问对应的 github page 即可看到博客的内容</p>
+</li>
 </ol>
-<p>3) 发布第一篇文章</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 新增一篇文章</span><br><span class="line">hexo new "My New Post"</span><br></pre></td></tr></table></figure>
-<p>   随后会在<code>source/_posts</code>目录下生成对应的 md 文件</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 生成静态文件</span><br><span class="line">hexo generate</span><br><span class="line"><span class="meta">#</span> hexo g</span><br></pre></td></tr></table></figure>
-<p>   这一步会将 markdown 编译成对应的 html，以供部署</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 部署至github</span><br><span class="line">hexo deploy</span><br><span class="line"><span class="meta">#</span> hexo d</span><br></pre></td></tr></table></figure>
-<p>   在这一步前，安装 hexo-deployer-git 的插件</p>
-   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add hexo-deployer-git</span><br></pre></td></tr></table></figure>
-<p>   在<code>_config.yml</code>中配置好对应的信息</p>
-   <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/lyt9304/lyt9304.github.io.git</span></span><br></pre></td></tr></table></figure>
-<p>4) 过一会儿访问对应的 github page 即可看到博客的内容</p>
 <h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><h4 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h4><ol>
 <li><p>下载主题</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
@@ -427,6 +429,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/25/ShortCutSnippet/" rel="prev" title="常用系统 / 应用快捷键">
+                常用系统 / 应用快捷键 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -500,7 +518,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -511,7 +529,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -522,7 +540,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
