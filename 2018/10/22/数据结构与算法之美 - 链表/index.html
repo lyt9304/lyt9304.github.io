@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/22/数据结构与算法之美%20-%20链表/5.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/数据结构与算法之美%20-%20链表/6.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/10/22/数据结构与算法之美%20-%20链表/7.jpg">
-<meta property="og:updated_time" content="2018-10-22T04:35:27.345Z">
+<meta property="og:updated_time" content="2018-10-22T08:47:15.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构与算法之美 - 链表">
 <meta name="twitter:description" content="数据结构与算法之美 - 链表 所有内容均是来自极客时间王争老师的 数据结构与算法之美 课程文章只是摘要笔记  五花八门的链表结构底层存储结构 数组：连续的内存空间 链表：通过指针将零碎的内存块串联  单链表  头结点 尾结点：指针指向 NULL 单纯的指定插入删除，复杂度都是 O(1) 随机访问第 k 个元素要从头开始，复杂度 O(n)  循环链表  适合处理数据具有环形结构特点   约瑟夫问题">
@@ -432,6 +432,13 @@
 <li>两个有序的链表合并</li>
 <li>删除链表倒数第 n 个结点</li>
 <li>求链表的中间结点</li>
+</ul>
+<p>要点总结：</p>
+<ul>
+<li>注意带头链表的好处，比如有序链表合并需要进行插入操作的时候</li>
+<li>链表的 O(n)解法，一般都要使用多个指针来简化过程，比如第 n 个结点可以用两个间隔为 n 的指针来维护；比如环检测中使用两个不同步幅的指针；比如求中间结点使用走一步和走两步的指针来完成 2 倍这个关系；</li>
+<li>指针间赋值顺序要注意，不然会丢失掉</li>
+<li>记得循环中，指针往前走需要 p = p.next，不然可能会无限循环</li>
 </ul>
 <h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h3 id="常用策略"><a href="#常用策略" class="headerlink" title="常用策略"></a>常用策略</h3><ul>
 <li>先进先出策略 FIFO（First In，First Out）</li>
