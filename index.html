@@ -253,6 +253,250 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/数据结构与算法之美 - 链表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/22/数据结构与算法之美 - 链表/" itemprop="url">数据结构与算法之美 - 链表</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-22T12:34:01+08:00">
+                2018-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法之美</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/数据结构与算法/课程笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">课程笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据结构与算法之美-链表"><a href="#数据结构与算法之美-链表" class="headerlink" title="数据结构与算法之美 - 链表"></a>数据结构与算法之美 - 链表</h1><blockquote>
+<p>所有内容均是来自极客时间王争老师的 <a href="https://time.geekbang.org/column/126" target="_blank" rel="noopener">数据结构与算法之美</a> 课程<br>文章只是摘要笔记</p>
+</blockquote>
+<h2 id="五花八门的链表结构"><a href="#五花八门的链表结构" class="headerlink" title="五花八门的链表结构"></a>五花八门的链表结构</h2><h3 id="底层存储结构"><a href="#底层存储结构" class="headerlink" title="底层存储结构"></a>底层存储结构</h3><ul>
+<li>数组：连续的内存空间</li>
+<li>链表：通过指针将零碎的内存块串联</li>
+</ul>
+<h3 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h3><p><img src="/2018/10/22/数据结构与算法之美 - 链表/1.jpg" alt="single linked list"></p>
+<ul>
+<li>头结点</li>
+<li>尾结点：指针指向 NULL</li>
+<li>单纯的指定插入删除，复杂度都是 O(1)<br><img src="/2018/10/22/数据结构与算法之美 - 链表/4.jpg" alt=""></li>
+<li>随机访问第 k 个元素要从头开始，复杂度 O(n)</li>
+</ul>
+<h3 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h3><p><img src="/2018/10/22/数据结构与算法之美 - 链表/2.jpg" alt=""></p>
+<ul>
+<li>适合处理数据具有环形结构特点</li>
+</ul>
+<blockquote>
+<p>约瑟夫问题<br>这个问题是以弗拉维奥·约瑟夫命名的，它是 1 世纪的一名犹太历史学家。他在自己的日记中写道，他和他的 40 个战友被罗马军队包围在洞中。他们讨论是自杀还是被俘，最终决定自杀，并以抽签的方式决定谁杀掉谁。约瑟夫斯和另外一个人是最后两个留下的人。约瑟夫斯说服了那个人，他们将向罗马军队投降，不再自杀。约瑟夫斯把他的存活归因于运气或天意，他不知道是哪一个。</p>
+</blockquote>
+<h3 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h3><p><img src="/2018/10/22/数据结构与算法之美 - 链表/3.jpg" alt=""></p>
+<ul>
+<li>某些情况下的插入、删除操作比单链要简单高效，但是空间消耗大，因为要多存一个前驱指针</li>
+<li>删除<ul>
+<li>删除结点中“值等于某个给定值”的结点；双向没有优势</li>
+<li>删除给定指针指向的结点；单向需要再找前驱的结点，还需要 O(n)；双向就不需要，还是 O(1)</li>
+</ul>
+</li>
+<li>插入，同理在指定指针前插入一个结点，双向链表更好</li>
+<li>有序链表的查找，双向链表可以根据值得大小，向前找或向后找，平均只需要查找一半数据</li>
+<li>LinkedHashMap</li>
+<li>空间换时间</li>
+</ul>
+<h3 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h3><p><img src="/2018/10/22/数据结构与算法之美 - 链表/5.jpg" alt=""></p>
+<h2 id="数组与链表"><a href="#数组与链表" class="headerlink" title="数组与链表"></a>数组与链表</h2><h3 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h3><p><img src="/2018/10/22/数据结构与算法之美 - 链表/6.jpg" alt=""></p>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><ul>
+<li>数组：内存连续，可以利用 CPU 缓存；大小固定，扩容成本高</li>
+<li>链表：内存不连续，没有大小限制；额外指针消耗额外空间；频繁插入操作，会导致频繁内存申请和释放，容易造成内存碎片以及 GC</li>
+</ul>
+<h2 id="链表代码技巧"><a href="#链表代码技巧" class="headerlink" title="链表代码技巧"></a>链表代码技巧</h2><h3 id="技巧一：理解指针或引用的含义"><a href="#技巧一：理解指针或引用的含义" class="headerlink" title="技巧一：理解指针或引用的含义"></a>技巧一：理解指针或引用的含义</h3><h3 id="技巧二：警惕指针丢失和内存泄漏"><a href="#技巧二：警惕指针丢失和内存泄漏" class="headerlink" title="技巧二：警惕指针丢失和内存泄漏"></a>技巧二：警惕指针丢失和内存泄漏</h3><h3 id="技巧三：利用哨兵简化实现难度"><a href="#技巧三：利用哨兵简化实现难度" class="headerlink" title="技巧三：利用哨兵简化实现难度"></a>技巧三：利用哨兵简化实现难度</h3><ul>
+<li>原因：针对链表的插入、删除操作，需要对插入第一个结点和删除最后一个结点的情况进行特殊处理</li>
+<li>解决方法：引入哨兵结点（带头链表），这样就不需要做特殊情况的判断了<br><img src="/2018/10/22/数据结构与算法之美 - 链表/7.jpg" alt=""></li>
+<li>其他应用：在 n 长度的数组中查找值为 val 的元素，可以将最后一个元素作为哨兵结点，赋值成 val，循环条件从 i &lt; n 成为直接 arr[i] != val，从而减少了一次 i &lt; n 的判断（即使 i &lt; n，也还是需要判断 arr[i] == val）</li>
+</ul>
+<h3 id="技巧四：重点留意边界条件处理"><a href="#技巧四：重点留意边界条件处理" class="headerlink" title="技巧四：重点留意边界条件处理"></a>技巧四：重点留意边界条件处理</h3><ul>
+<li>链表为空时</li>
+<li>链表只包含一个结点时</li>
+<li>链表只包含两个结点时</li>
+<li>代码逻辑处理头结点和尾结点</li>
+</ul>
+<h3 id="技巧五：举例画图，辅助思考"><a href="#技巧五：举例画图，辅助思考" class="headerlink" title="技巧五：举例画图，辅助思考"></a>技巧五：举例画图，辅助思考</h3><h3 id="技巧六：多写多练，没有捷径"><a href="#技巧六：多写多练，没有捷径" class="headerlink" title="技巧六：多写多练，没有捷径"></a>技巧六：多写多练，没有捷径</h3><blockquote>
+<p>leetcode 对应练习题：206，141，21，19，876</p>
+</blockquote>
+<ul>
+<li>单链表反转</li>
+<li>链表中环的检测</li>
+<li>两个有序的链表合并</li>
+<li>删除链表倒数第 n 个结点</li>
+<li>求链表的中间结点</li>
+</ul>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h3 id="常用策略"><a href="#常用策略" class="headerlink" title="常用策略"></a>常用策略</h3><ul>
+<li>先进先出策略 FIFO（First In，First Out）</li>
+<li>最少使用策略 LFU（Least Frequently Used）</li>
+<li>最近最少使用策略 LRU（Least Recently Used）</li>
+</ul>
+<h3 id="LRU-的链表实现"><a href="#LRU-的链表实现" class="headerlink" title="LRU 的链表实现"></a>LRU 的链表实现</h3><ul>
+<li>维护有序链表缓存，头部更新，尾部更旧</li>
+<li>新数据被访问，遍历链表<ul>
+<li>已存在，从原位置删除，插入头部</li>
+<li>未存在<ul>
+<li>缓存未满，插入头部</li>
+<li>缓存已满，删除最尾部，插入头部</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="回文判断"><a href="#回文判断" class="headerlink" title="回文判断"></a>回文判断</h3><blockquote>
+<p>字符串使用单向链表存储，如何判断这个字符串是否是回文</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/14/数据结构与算法之美 - 复杂度分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1801,7 +2045,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
