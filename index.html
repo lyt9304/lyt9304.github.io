@@ -253,6 +253,235 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/26/数据结构与算法之美 - 二分查找/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yiting Li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lyt9304's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/26/数据结构与算法之美 - 二分查找/" itemprop="url">数据结构与算法之美 - 二分查找</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-26T16:07:07+08:00">
+                2018-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法之美</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/数据结构与算法/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法之美/数据结构与算法/课程笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">课程笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据结构与算法之美-二分查找"><a href="#数据结构与算法之美-二分查找" class="headerlink" title="数据结构与算法之美 - 二分查找"></a>数据结构与算法之美 - 二分查找</h1><blockquote>
+<p>所有内容均是来自极客时间王争老师的 <a href="https://time.geekbang.org/column/126" target="_blank" rel="noopener">数据结构与算法之美</a> 课程<br>文章只是摘要笔记</p>
+</blockquote>
+<h2 id="1-思想"><a href="#1-思想" class="headerlink" title="1. 思想"></a>1. 思想</h2><ul>
+<li>针对的是一个有序的数据集合</li>
+<li>每次都通过跟区间的中间元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为 0</li>
+<li>时间复杂度 O(logn)，对数时间复杂度</li>
+</ul>
+<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h2><h3 id="2-1-非递归实现"><a href="#2-1-非递归实现" class="headerlink" title="2.1 非递归实现"></a>2.1 非递归实现</h3><p>只考虑最简单的情况：有序数组中不存在重复元素</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearch</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> low = <span class="number">0</span></span><br><span class="line">	<span class="keyword">let</span> high = arr.length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">		<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((high + low) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (arr[mid] === target) &#123;</span><br><span class="line">			<span class="keyword">return</span> mid</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[mid] &gt; target) &#123;</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ul>
+<li>循环条件：<code>low&lt;=high</code>，比到最后一个值是 low 和 high 会相等，所以需要等于</li>
+<li>mid 的取值：<code>Math.floor((high + low) / 2)</code>，但是如果 high 和 low 的取值过大，相加可能会溢出，所以可以换写法<ul>
+<li><code>low + Math.floor((high - low) / 2)</code></li>
+<li>或者用位运算右移一位来代替整除 2：<code>low + (high - low) &gt;&gt; 1</code></li>
+</ul>
+</li>
+<li>比较的时候要记得取出数值再比较，老是写错：<code>arr[mid] === target</code></li>
+<li>更新 high 和 low 的值时，要记得在 mid 基础上加一减一，直接取 mid 值的话，比如：high 和 low 都是 3，mid 也是 3，但是 arr[3] !== target，如果还取 3 作为边界，就会造成死循环</li>
+</ul>
+<h3 id="2-2-递归实现"><a href="#2-2-递归实现" class="headerlink" title="2.2 递归实现"></a>2.2 递归实现</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearchRecursive</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> bsearchRecursiveInternal(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>, target)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearchRecursiveInternal</span>(<span class="params">arr, low, high, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((low + high) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (low &gt; high) <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (arr[mid] === target) &#123;</span><br><span class="line">		<span class="keyword">return</span> mid</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[mid] &gt; target) &#123;</span><br><span class="line">		<span class="keyword">return</span> bsearchRecursiveInternal(arr, low, mid - <span class="number">1</span>, target)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> bsearchRecursiveInternal(arr, mid + <span class="number">1</span>, high, target)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ul>
+<li>外部函数来满足外部接口需求，内部函数来保证递归的接口需求</li>
+<li>注意递归的边界有两部分<ul>
+<li>没找到的话：<code>if (low &gt; high) return -1</code></li>
+<li>找到的话：<code>if (arr[mid] === target) return mid</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-应用场景的局限性"><a href="#3-应用场景的局限性" class="headerlink" title="3. 应用场景的局限性"></a>3. 应用场景的局限性</h2><ul>
+<li>二分查找依赖数组，需要其按下标随机访问数据的特性</li>
+<li>二分查找针对的是有序数据，且不适用于插入删除操作频繁的动态数据集合</li>
+<li>数据量太小不适合二分查找，不如顺序查找，但如果数据比较操作很耗时间，则应优先二分查找来尽可能减少比较次数</li>
+<li>数据量太大也不适合二分查找，因为数组需要连续的内存空间，但其数组相较其他数据结构占用内存更小，更可以节省内存（但要连续）</li>
+</ul>
+<h2 id="4-二分查找的变形问题"><a href="#4-二分查找的变形问题" class="headerlink" title="4. 二分查找的变形问题"></a>4. 二分查找的变形问题</h2><p>对于“值等于给定值”的二分查找问题，我们更倾向于用散列表或者二叉查找树</p>
+<p>但是二分查找其实更适合用在“近似”查找问题，这类问题用散列表和二叉树就很比较难实现了</p>
+<p>二分查找的一些细节点需要注意：</p>
+<ul>
+<li>终止条件</li>
+<li>区间上下界更新</li>
+<li>返回值的选择，以及边界的判断（第一个、最后一个）</li>
+</ul>
+<h3 id="1-查找第一个值等于给定值的元素"><a href="#1-查找第一个值等于给定值的元素" class="headerlink" title="1 查找第一个值等于给定值的元素"></a>1 查找第一个值等于给定值的元素</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearch</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> low = <span class="number">0</span></span><br><span class="line">	<span class="keyword">let</span> high = arr.length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">		<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((low + high) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (arr[mid] === target) &#123;</span><br><span class="line">			<span class="keyword">if</span> (mid === <span class="number">0</span> || arr[mid - <span class="number">1</span>] !== target) <span class="keyword">return</span> mid</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[mid] &gt; target) &#123;</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ul>
+<li>判断是否是第一个的条件：<code>mid === 0 || arr[mid - 1] !== target</code></li>
+<li>虽然值相等，但不是第一个的，反过来说就是，要找的值还在左边的区间</li>
+</ul>
+<h3 id="2-查找最后一个值等于给定值的元素"><a href="#2-查找最后一个值等于给定值的元素" class="headerlink" title="2 查找最后一个值等于给定值的元素"></a>2 查找最后一个值等于给定值的元素</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearch</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> low = <span class="number">0</span></span><br><span class="line">	<span class="keyword">let</span> high = arr.length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">		<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((low + high) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (arr[mid] === target) &#123;</span><br><span class="line">			<span class="comment">// 只需要这里判断反一下，判断是不是最右边</span></span><br><span class="line">			<span class="keyword">if</span> (mid === arr.length - <span class="number">1</span> || arr[mid + <span class="number">1</span>] !== target) <span class="keyword">return</span> mid</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[mid] &gt; target) &#123;</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-查找第一个大于等于给定值的元素"><a href="#3-查找第一个大于等于给定值的元素" class="headerlink" title="3 查找第一个大于等于给定值的元素"></a>3 查找第一个大于等于给定值的元素</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearch</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> low = <span class="number">0</span></span><br><span class="line">	<span class="keyword">let</span> high = arr.length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">		<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((low + high) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (arr[mid] &gt;= target) &#123;</span><br><span class="line">			<span class="keyword">if</span> (mid === <span class="number">0</span> || arr[mid - <span class="number">1</span>] &lt; target) <span class="keyword">return</span> mid</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ul>
+<li>满足大于等于的条件之后，需要判断是不是第一个（也就是满足条件的最左边的值）：<code>mid === 0 || arr[mid - 1] &lt; target</code>，要么是数组最左边的值，要么就是这个值的左边的值已经不满足大于等于的条件了</li>
+</ul>
+<h3 id="4-查找最后一个小于等于等于给定值的元素"><a href="#4-查找最后一个小于等于等于给定值的元素" class="headerlink" title="4 查找最后一个小于等于等于给定值的元素"></a>4 查找最后一个小于等于等于给定值的元素</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bsearch</span>(<span class="params">arr, target</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">let</span> low = <span class="number">0</span></span><br><span class="line">	<span class="keyword">let</span> high = arr.length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">		<span class="keyword">let</span> mid = <span class="built_in">Math</span>.floor((low + high) / <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (arr[mid] &lt;= target) &#123;</span><br><span class="line">			<span class="keyword">if</span> (mid === arr.length - <span class="number">1</span> || arr[mid + <span class="number">1</span>] &gt; target) <span class="keyword">return</span> mid</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			high = mid - <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意点：</p>
+<ul>
+<li>满足小于等于的条件之后，需要判断是不是最后一个（也就是满足条件的最右边的值）：<code>mid === arr.length - 1 || arr[mid + 1] &gt; target</code>，要么是数组最右边的值，要么就是这个值的右边的值已经不满足小于等于的条件了</li>
+</ul>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ol>
+<li>如何编程实现“求一个数的平方根”？要求精确到小数点后 6 位</li>
+<li>如何实现循环有序数组（比如：[4, 5, 6, 1, 2, 3]）的“值等于给定值”的二分查找问题</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/数据结构与算法之美 - 链表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2052,7 +2281,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
